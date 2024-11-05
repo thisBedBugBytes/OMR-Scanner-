@@ -240,7 +240,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    "GitHub Account",
+                                    "Sign up",
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
