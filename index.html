@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+</head>
+<body class="light-mode"> <!-- Default to light mode -->
+
+  <div class="container">
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+      <div class="navbar">
+        <div class="logo">
+          <img src="assets/scan_logo.png" alt="Logo"> <!-- Your logo here -->
+          <h1>Student Dashboard</h1>
+        </div>
+        <ul>
+          <li><a href="#"><i class="fas fa-user"></i> Profile</a></li>
+          <li><a href="#"><i class="fas fa-graduation-cap"></i> Courses</a></li>
+          <li><a href="#"><i class="fas fa-chart-bar"></i> Grades</a></li>
+          <li><a href="#" id="light-mode-btn"><i class="fas fa-sun"></i> Light Mode</a></li>
+          <li><a href="#" id="dark-mode-btn"><i class="fas fa-moon"></i> Dark Mode</a></li>
+          <li><a href="#"><i class="fas fa-upload"></i> Upload OMR</a></li>
+          <li><a href="#"><i class="fas fa-cogs"></i> Settings</a></li>
+          <li><a href="#"><i class="fas fa-users"></i> Faculty List</a></li>
+          <li><a href="#" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main Content Section -->
+    <section class="main-content">
+      <div class="main-header">
+        <h1>OMR Grade Tracker</h1>
+      </div>
+
+      <!-- Search Bar and Filters -->
+      <div class="search-bar">
+        <input type="search" placeholder="Search Courses or Grades">
+        <select>
+          <option>Filter by Course</option>
+          <option>Course 1</option>
+          <option>Course 2</option>
+          <option>Course 3</option>
+        </select>
+      </div>
+
+      <!-- Tags for Course Filters -->
+      <div class="tags-bar">
+        <div class="tag"><i class="fas fa-book"></i> Programming</div>
+        <div class="tag"><i class="fas fa-atom"></i> Physics</div>
+        <div class="tag"><i class="fas fa-language"></i> Languages</div> 
+      </div>
+
+      <!-- Grades History -->
+      <div class="grades-history">
+        <h2>Grade History</h2>
+        <div class="grade-card">
+          <h3>Course: CSE 115 </h3>
+          <p>Grade: A</p>
+        </div>
+        <div class="grade-card">
+          <h3>Course: MAT 120 </h3>
+          <p>Grade: B+</p>
+        </div>
+      </div>
+
+      <!-- Faculty Listings -->
+      <div class="faculty-list">
+        <h2>Faculty List</h2>
+        <div class="faculty-item">
+          <h3>Professor A</h3>
+          <p>Course: CSE 115 </p>
+        </div>
+        <div class="faculty-item">
+          <h3>Professor B</h3>
+          <p>Course: MAT 250 </p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
