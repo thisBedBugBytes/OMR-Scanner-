@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, render, HttpResponse
 from .utils.pdf_gen import generate_pdf
+from .forms  import uploadFiles
 from .models import *
 import logging
 import math
@@ -42,7 +43,7 @@ def make_pdf(request):
         request.session['question_num'] = 0
         pdf_created = False  # 
         questions_num = 0
-        ans = Answer_Sheet.objects.all()
+        ans = Answers.objects.all()
         print(ans)
         return render(request, 'pdf_gen.html', {'pdf_created': pdf_created, 'question_num': questions_num})
 
@@ -52,9 +53,24 @@ def create_pdf(request):
     
     if request.method == "POST":
         logger.info("Got the goods")
-        name = request.POST.get('file_name')
+        file_name = request.POST.get('file_name')
         que_no = request.POST.get('q_no')
+
+        #undo comment after teacher login is instantiated
+        """
         
+        teacher_id = request.session.get('teacher_id')
+        course_id = request.session.get('course_id')
+
+        teacher = Teacher.objects.get(teacher_id=teacher_id)
+        course = Course.objects.get(course_code=course_id)
+
+        test = Test.objects.create(
+            title = f"Test for {course.course_name}",
+            course = course,
+            teacher = teacher
+        )""" 
+
         logger.info("Making the pdf")
         pdf = generate_pdf(que_no)
         
@@ -68,7 +84,11 @@ def create_pdf(request):
 
         logger.info("Sending the pdf")
         response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="{name}.pdf"'
+        if file_name:  # Ensure file_name is not empty or None
+            sanitized_file_name = file_name.replace('"', '').replace("'", "")  # Sanitize input
+            response['Content-Disposition'] = f'attachment; filename="{sanitized_file_name}.pdf"'
+        else:
+            response['Content-Disposition'] = 'attachment; filename="default_name.pdf"'  # Fallback
 
         # Use a custom header to signal the front-end for a redirect
         response['Redirect-After-Download'] = '/store_ans/'
@@ -83,6 +103,9 @@ def store_ans(request):
 
         question_num = int(request.session.get('question_num'))
         pdf_created = request.session.get('pdf_created')
+
+        test_id = request.session.get('test_id')
+        test = Test.objects.get(test_id=test_id)
 
         pages = 1 + math.ceil((question_num - 56) / 60) 
         answers = {}
@@ -110,8 +133,14 @@ def store_ans(request):
                 if ans is not None:
                     if page not in answers:
                         answers[page] = {}
-                    answers[page][q] = int(ans)  # Store the answer as an integer (0, 1, 2, 3)
+                    #answers[page][q] = int(ans)  # Store the answer as an integer (0, 1, 2, 3)
+                    Answers.objects.create(
+                        test = test,
+                        page_number = page,
+                        question_number = q,
+                        correct_ans = int(ans)
 
+                    )
         print(answers)
         #my_instance = Answer_Sheet.objects.create(answer=answers)
 
@@ -122,4 +151,16 @@ def store_ans(request):
         return render(request, 'answers.html', {'range_list': range_list})
 
 
-        
+#load html page for file upload
+def submit_paper(request):
+    form = uploadFiles()
+    if request.FILES:
+        form = uploadFiles(request.POST, request.FILES)
+        if form.is_valid:
+           form.save()
+            
+
+    return render(request, 'grade_submit.html', {'form': form})
+ 
+
+#process the uploaded images
