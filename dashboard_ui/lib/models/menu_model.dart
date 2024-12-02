@@ -5,4 +5,6 @@ class MenuModel{
   final String title;
 
   const MenuModel({required this.icon, required this.title});
+
+
 }

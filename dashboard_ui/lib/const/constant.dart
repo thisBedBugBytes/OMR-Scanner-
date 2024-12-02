@@ -71,3 +71,6 @@ class Responsive {
     return MediaQuery.of(context).size.width >= 1200;
   }
 }
+
+
+

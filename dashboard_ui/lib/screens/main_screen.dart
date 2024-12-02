@@ -3,9 +3,10 @@ import 'package:dashboard_ui/widgets/side_menu_widget.dart';
 import 'package:dashboard_ui/widgets/dashboard_widget.dart';
 import 'package:dashboard_ui/util/responsive.dart';
 
-class MainScreen extends StatelessWidget {
-  const MainScreen({super.key});
 
+class MainScreen extends StatelessWidget {
+   MainScreen({super.key});
+  Offset position = const Offset(20.0, 20.0);
   @override
   Widget build(BuildContext context) {
     final isDesktop = Responsive.isDesktop(context);
@@ -30,8 +31,9 @@ class MainScreen extends StatelessWidget {
               ),
             Expanded(
               flex: 8,
-              child: const DashboardWidget(),  // Your dashboard content here
+              child:   DashboardWidget(),  // Your dashboard content here
             ),
+
           ],
         ),
       ),

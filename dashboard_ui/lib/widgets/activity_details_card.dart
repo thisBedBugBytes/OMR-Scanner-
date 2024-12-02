@@ -22,27 +22,34 @@ class ActivityDetailsCard extends StatelessWidget {
         final course = courses[index];
 
         return CustomCard(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.asset(
-                course.icon,
-                width: 77,
-                height: 77,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                course.title,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+          child: InkWell(
+            onTap: ()  {Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => course.destination),
+            );},
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset(
+                  course.icon,
+                  width: 77,
+                  height: 77,
                 ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
+                const SizedBox(height: 8),
+                Text(
+                  course.title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+
+            ),
+           ),
         );
       },
     );

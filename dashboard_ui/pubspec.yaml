@@ -13,6 +13,19 @@ dependencies:
   cupertino_icons: ^1.0.2
   fl_chart: ^0.62.0
   flutter_svg: ^2.0.5
+  floating_draggable_widget: ^2.3.0
+  # gal: ^2.3.0
+  flutter_doc_scanner: ^0.0.8
+  cunning_document_scanner: ^1.2.3
+  google_mlkit_entity_extraction: ^0.14.0
+  http: ^1.2.2
+  path_provider: ^2.1.5
+  flutter_downloader: ^1.11.8
+  permission_handler: ^11.3.1
+  file_saver: ^0.2.14
+  file_picker: ^8.1.4
+  device_info_plus: ^11.1.1
+  open_file: ^3.5.10
 
 dev_dependencies:
   flutter_test:
