@@ -1,4 +1,4 @@
-"""student_management_system URL Configuration
+"""omrgradetracker URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.1/topics/http/urls/
@@ -83,8 +83,7 @@ urlpatterns = [
 
     # teacher
     path("teacher/home/", teacher_views.teacher_home, name='teacher_home'),
-    path("teacher/apply/leave/", teacher_views.teacher_apply_leave,
-         name='teacher_apply_leave'),
+  
     path("teacher/feedback/", teacher_views.teacher_feedback, name='teacher_feedback'),
     path("teacher/view/profile/", teacher_views.teacher_view_profile,
          name='teacher_view_profile'),
@@ -101,7 +100,7 @@ urlpatterns = [
     path('teacher/result/fetch/', teacher_views.fetch_student_result,
          name='fetch_student_result'),
 
-  #   path("teacher/feedback2/", teacher_views.feedback_message, name='feedback'),
+ 
 
 
     # Student
@@ -120,7 +119,6 @@ urlpatterns = [
     path('student/view/result/', student_views.student_view_result,
          name='student_view_result'),
 
-  #  path("student/feedback2/", student_views.feedback,
-   #      name='student_feedback'),
+
 
 ]

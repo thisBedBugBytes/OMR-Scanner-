@@ -40,7 +40,7 @@
 <style>
     body {
         font-family: 'Playfair Display', serif;
-        background-color: #ffffff ; /* Force background color */
+        background-color: #dd9ddd ;  /* Force background color */
         color: #333;
     }
 
@@ -155,7 +155,10 @@
         color: white;
     }
 
-    
+    .checkbox-group {
+        max-height: 200px;  /* Limit the height */
+        overflow-y: auto;   /* Make it scrollable */
+      }
 </style>
 
     {% block custom_css %}

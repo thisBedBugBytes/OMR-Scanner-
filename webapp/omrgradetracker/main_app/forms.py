@@ -64,10 +64,10 @@ class StudentForm(CustomUserForm):
         fields = CustomUserForm.Meta.fields + \
             ['department', 'examination']
         widgets = {
-            'examination': forms.CheckboxSelectMultiple,  # or you can use forms.SelectMultiple
+            'examination': forms.SelectMultiple(attrs={
+                'size': '10', 'class': 'custom-multiple'  # Add class for custom styling
+            }),
         }
-
-
 class AdminForm(CustomUserForm):
     def __init__(self, *args, **kwargs):
         super(AdminForm, self).__init__(*args, **kwargs)
@@ -195,10 +195,11 @@ class EditResultForm(FormSettings):
     examination_list = Examination.objects.all()
     examination_year = forms.ModelChoiceField(
         label="Examination Year", queryset=examination_list, required=True)
+   
 
     def __init__(self, *args, **kwargs):
         super(EditResultForm, self).__init__(*args, **kwargs)
 
     class Meta:
         model = StudentResult
-        fields = ['examination_year', 'subject', 'student', 'exam']
+        fields = ['examination_year',  'subject', 'student', 'exam' ]

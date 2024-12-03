@@ -2,7 +2,7 @@
 {% load static %}
 {% block custom_css %}
   <style>
-      .invalid {
+         .invalid {
         font-style: italic;
         font-weight: bold;
         color: red;
@@ -12,7 +12,19 @@
         font-weight: bold;
         color: green;
       }
+      .checkbox-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;  /* Adjust space between checkboxes */
+        max-width: 100%;  /* Ensure the container doesn't overflow */
+        overflow: hidden;  /* Hide overflowed content */
+      }
+      .checkbox-group input {
+        width: auto;
+      }
+
   </style>
+  
 {% endblock custom_css %}
 
 {% block page_title %}{{ page_title }}{% endblock page_title %}

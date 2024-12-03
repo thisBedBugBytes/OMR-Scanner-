@@ -19,29 +19,22 @@
                         <div class="card-body">
                             {{ form }}
 
-                            <!-- Existing Marksheet Picture -->
-                            <div class="form-group">
-                                <label for="marksheet_pic">Existing Marksheet:</label><br>
-                                <div id="marksheet_preview">
-                                    {% if form.instance.marksheet_pic %}
-                                        <img src="{{ form.instance.marksheet_pic.url }}" 
-                                             alt="Marksheet Picture" 
-                                             style="max-width: 2000px; height: auto; margin-bottom: 20px;">
-                                        <!-- Button to view enlarged image -->
-                                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#marksheetModal">
-                                            View Enlarged Image
-                                        </button>
-                                    {% else %}
-                                        <p>No marksheet uploaded.</p>
-                                    {% endif %}
-                                </div>
-                            </div>
+   <!-- Existing Marksheet Picture -->
+<div class="form-group">
+    <label for="marksheet_pic">Existing Marksheet:</label><br>
+    <div id="marksheet_preview">
+        {% if form.instance.marksheet_pic %}
+            <img src="{{ form.instance.marksheet_pic.url }}" 
+                 alt="Marksheet Picture" 
+                 style="max-width: 200px; height: auto; margin-bottom: 20px; cursor: pointer;" 
+                 id="marksheet_image">
+        {% else %}
+            <p>No marksheet uploaded.</p>
+        {% endif %}
+    </div>
+</div>
 
-                            <!-- Upload New Marksheet Picture -->
-                            <div class="form-group">
-                                <label for="marksheet_pic">Upload New Marksheet (optional):</label>
-                                <input type="file" name="marksheet_pic" id="marksheet_pic" class="form-control">
-                            </div>
+
                         </div>
                         <!-- /.card-body -->
 
@@ -77,6 +70,13 @@
 {% block custom_js %}
 <script>
     $(document).ready(function () {
+        // Open modal with enlarged image when clicked (Event Delegation)
+        $(document).on("click", "#marksheet_image", function () {
+            var imgSrc = $(this).attr('src');
+            $("#enlarged_marksheet").attr("src", imgSrc);
+            $('#marksheetModal').modal('show');
+        });
+
         // Fetch student data dynamically based on subject and year
         $("#id_subject, #id_examination_year").change(function () {
             fetchStudents();
@@ -151,7 +151,7 @@
                         if (json_data.marksheet_pic_url) {
                             $("#marksheet_preview").html(
                                 `<img src="${json_data.marksheet_pic_url}" alt="Marksheet Picture" 
-                                      style="max-width: 1000px; height: auto; margin-top: 15px;">`
+                                      style="max-width: 200px; height: auto; margin-top: 15px; cursor: pointer;" id="marksheet_image">`
                             );
                             // Set the enlarged image in modal
                             $("#enlarged_marksheet").attr("src", json_data.marksheet_pic_url);
@@ -166,5 +166,24 @@
             });
         }
     });
+
+    $(document).ready(function () {
+    // Open modal with enlarged image when clicked
+    $(document).on("click", "#marksheet_image", function () {
+        var imgSrc = $(this).attr('src');
+        $("#enlarged_marksheet").attr("src", imgSrc);
+        $('#marksheetModal').modal('show');
+    });
+
+    // Handle new marksheet upload
+    $('#marksheet_pic').change(function() {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            // Preview the new image after selection
+            $('#marksheet_preview').html('<img src="' + e.target.result + '" alt="New Marksheet" style="max-width: 200px; height: auto; margin-bottom: 20px;" id="marksheet_image">');
+        };
+        reader.readAsDataURL(this.files[0]);
+    });
+});
 </script>
 {% endblock custom_js %}

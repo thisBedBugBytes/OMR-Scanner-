@@ -14,22 +14,22 @@ from .models import *
 def teacher_home(request):
     teacher = get_object_or_404(Teacher, admin=request.user)
     total_students = Student.objects.filter(department=teacher.department).count()
-    total_leave = LeaveReportTeacher.objects.filter(teacher=teacher).count()
+    
     subjects = Subject.objects.filter(teacher=teacher)
     total_subject = subjects.count()
-    attendance_list = Attendance.objects.filter(subject__in=subjects)
+    
     total_attendance = attendance_list.count()
     attendance_list = []
     subject_list = []
     for subject in subjects:
-        attendance_count = Attendance.objects.filter(subject=subject).count()
+        
         subject_list.append(subject.name)
-        attendance_list.append(attendance_count)
+        
     context = {
         'page_title': 'Teacher Panel - ' + str(teacher.admin.last_name) + ' (' + str(teacher.department) + ')',
         'total_students': total_students,
         'total_attendance': total_attendance,
-        'total_leave': total_leave,
+        
         'total_subject': total_subject,
         'subject_list': subject_list,
         'attendance_list': attendance_list
@@ -64,29 +64,6 @@ def get_students(request):
 
 
 
-
-def teacher_apply_leave(request):
-    form = LeaveReportTeacherForm(request.POST or None)
-    teacher = get_object_or_404(Teacher, admin_id=request.user.id)
-    context = {
-        'form': form,
-        'leave_history': LeaveReportTeacher.objects.filter(teacher=teacher),
-        'page_title': 'Apply for Leave'
-    }
-    if request.method == 'POST':
-        if form.is_valid():
-            try:
-                obj = form.save(commit=False)
-                obj.teacher = teacher
-                obj.save()
-                messages.success(
-                    request, "Application for leave has been submitted for review")
-                return redirect(reverse('teacher_apply_leave'))
-            except Exception:
-                messages.error(request, "Could not apply!")
-        else:
-            messages.error(request, "Form has errors!")
-    return render(request, "teacher_template/teacher_apply_leave.html", context)
 
 
 def teacher_feedback(request):
@@ -192,7 +169,6 @@ def teacher_view_notification(request):
     }
     return render(request, "teacher_template/teacher_view_notification.html", context)
 
-
 def teacher_add_result(request):
     teacher = get_object_or_404(Teacher, admin=request.user)
     subjects = Subject.objects.filter(teacher=teacher)
@@ -223,19 +199,19 @@ def teacher_add_result(request):
 
             if not created:  # If the result already exists, update it
                 result.exam = exam
-                if marksheet_pic:  # Update the picture if a new one is provided
+                if marksheet_pic:  # Update the marksheet if a new one is provided
                     result.marksheet_pic = marksheet_pic
                 result.save()
                 messages.success(request, "Result updated successfully!")
             else:
-                result.marksheet_pic = marksheet_pic  # Ensure the marksheet is saved
+                if marksheet_pic:  # Ensure the marksheet is saved on creation
+                    result.marksheet_pic = marksheet_pic
                 result.save()
                 messages.success(request, "Result saved successfully!")
         except Exception as e:
             messages.warning(request, f"Error occurred while processing form: {str(e)}")
 
     return render(request, "teacher_template/teacher_add_result.html", context)
-
 
 
 
