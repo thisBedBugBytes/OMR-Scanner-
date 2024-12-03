@@ -1,0 +1,189 @@
+{% extends 'main_app/base.html' %}
+{% load static %}
+{% block page_title %}{{ page_title }}{% endblock page_title %}
+{% block content %}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- General form elements -->
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">{{ page_title }}</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- Form start -->
+                        <div class="card-body">
+                            {{ form }}
+
+   <!-- Existing Marksheet Picture -->
+<div class="form-group">
+    <label for="marksheet_pic">Existing Marksheet:</label><br>
+    <div id="marksheet_preview">
+        {% if form.instance.marksheet_pic %}
+            <img src="{{ form.instance.marksheet_pic.url }}" 
+                 alt="Marksheet Picture" 
+                 style="max-width: 200px; height: auto; margin-bottom: 20px; cursor: pointer;" 
+                 id="marksheet_image">
+        {% else %}
+            <p>No marksheet uploaded.</p>
+        {% endif %}
+    </div>
+</div>
+
+
+                        </div>
+                        <!-- /.card-body -->
+
+                        <div class="card-footer">
+                            <button type="submit" id="update_result" class="btn btn-primary btn-block">Update Result</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modal for Enlarged Image -->
+<div class="modal fade" id="marksheetModal" tabindex="-1" role="dialog" aria-labelledby="marksheetModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="marksheetModalLabel">Enlarged Marksheet Image</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <img id="enlarged_marksheet" src="" alt="Marksheet Picture" style="width: 100%; height: auto;">
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block custom_js %}
+<script>
+    $(document).ready(function () {
+        // Open modal with enlarged image when clicked (Event Delegation)
+        $(document).on("click", "#marksheet_image", function () {
+            var imgSrc = $(this).attr('src');
+            $("#enlarged_marksheet").attr("src", imgSrc);
+            $('#marksheetModal').modal('show');
+        });
+
+        // Fetch student data dynamically based on subject and year
+        $("#id_subject, #id_examination_year").change(function () {
+            fetchStudents();
+        });
+
+        // Fetch student result dynamically when a student is selected
+        $("#id_student").change(function () {
+            fetch_student_result();
+        });
+
+        function fetchStudents() {
+            var subject = $("#id_subject").val();
+            var examination = $("#id_examination_year").val();
+
+            if (!subject || !examination) {
+                $("#id_student").html('<option>Select Student</option>');
+                return;
+            }
+
+            $.ajax({
+                url: "{% url 'get_students' %}",
+                type: 'POST',
+                data: {
+                    subject: subject,
+                    examination: examination,
+                    csrfmiddlewaretoken: "{{ csrf_token }}"
+                },
+                success: function (response) {
+                    var json_data = JSON.parse(response);
+                    if (json_data.length > 0) {
+                        var options = '<option value="">Select Student</option>';
+                        json_data.forEach(function (student) {
+                            options += `<option value="${student.id}">${student.name}</option>`;
+                        });
+                        $("#id_student").html(options);
+                    } else {
+                        alert("No students found.");
+                    }
+                },
+                error: function () {
+                    alert("Error fetching students.");
+                }
+            });
+        }
+
+        function fetch_student_result() {
+            var student = $("#id_student").val();
+            var subject = $("#id_subject").val();
+
+            if (!student || !subject) {
+                return;
+            }
+
+            $.ajax({
+                url: "{% url 'fetch_student_result' %}",
+                type: 'POST',
+                data: {
+                    subject: subject,
+                    student: student,
+                    csrfmiddlewaretoken: "{{ csrf_token }}"
+                },
+                success: function (response) {
+                    if (response === 'False') {
+                        alert("No data found for this student and subject.");
+                    } else {
+                        var json_data = JSON.parse(response);
+
+                        // Update exam score
+                        $("#id_exam").val(json_data.exam);
+
+                        // Update marksheet preview
+                        if (json_data.marksheet_pic_url) {
+                            $("#marksheet_preview").html(
+                                `<img src="${json_data.marksheet_pic_url}" alt="Marksheet Picture" 
+                                      style="max-width: 200px; height: auto; margin-top: 15px; cursor: pointer;" id="marksheet_image">`
+                            );
+                            // Set the enlarged image in modal
+                            $("#enlarged_marksheet").attr("src", json_data.marksheet_pic_url);
+                        } else {
+                            $("#marksheet_preview").html('<p>No marksheet uploaded.</p>');
+                        }
+                    }
+                },
+                error: function () {
+                    alert("Error fetching student result.");
+                }
+            });
+        }
+    });
+
+    $(document).ready(function () {
+    // Open modal with enlarged image when clicked
+    $(document).on("click", "#marksheet_image", function () {
+        var imgSrc = $(this).attr('src');
+        $("#enlarged_marksheet").attr("src", imgSrc);
+        $('#marksheetModal').modal('show');
+    });
+
+    // Handle new marksheet upload
+    $('#marksheet_pic').change(function() {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            // Preview the new image after selection
+            $('#marksheet_preview').html('<img src="' + e.target.result + '" alt="New Marksheet" style="max-width: 200px; height: auto; margin-bottom: 20px;" id="marksheet_image">');
+        };
+        reader.readAsDataURL(this.files[0]);
+    });
+});
+</script>
+{% endblock custom_js %}
