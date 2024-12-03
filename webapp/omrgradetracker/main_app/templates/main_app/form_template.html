@@ -1,0 +1,90 @@
+<form role="form" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="border border-primary rounded p-4">
+        <h5 class="text-center mb-4"></h5>
+        {% block custom_css %}
+        <style>
+            .invalid {
+              font-style: italic;
+              font-weight: bold;
+              color: red;
+            }
+            .valid {
+              font-style: italic;
+              font-weight: bold;
+              color: green;
+            }
+      
+            /* Style the container to handle multiple checkboxes */
+            .examination-checkboxes {
+              display: block;  /* Make it block-level to take full width */
+              max-width: 100%;  /* Ensure no overflow horizontally */
+              overflow: hidden;  /* Hide any overflowed content */
+            }
+      
+            /* Add styling to the individual checkboxes */
+            .examination-checkboxes input {
+              width: auto;  /* Ensure no oversized input */
+              margin-right: 10px;  /* Optional: space between checkboxes */
+            }
+      
+            /* Adjust layout for the checkboxes */
+            .examination-checkboxes label {
+              display: inline-block;  /* Prevent them from overflowing */
+              width: 100%;  /* Ensure the label takes up full width */
+            }
+      
+            /* If the checkboxes are many, use a scrollable container */
+            .examination-checkboxes {
+              max-height: 200px; /* Limit height if needed */
+              overflow-y: auto;  /* Allow scrolling for long lists of checkboxes */
+              padding-right: 10px;  /* Optional: to ensure scroll doesn't overlap */
+            }
+        </style>
+      {% endblock custom_css %}
+        <!-- Form Fields -->
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}" class="d-block">{{ field.label }}</label>
+            
+            <!-- Handle checkboxes -->
+            {% if field.type == 'checkbox' %}
+                <div class="examination-checkboxes">
+                    {{ field }} {{ field.label }}
+                </div>
+            {% else %}
+                {{ field.errors }}
+                {{ field }}
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div class="text-center mt-4">
+        <button type="submit" class="btn custom-box-gradient-green btn-lg rounded-pill px-4">
+            {% if button_text %}
+            {{ button_text }}
+            {% else %}
+            Submit
+            {% endif %}
+        </button>
+    </div>
+
+
+</form>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const selects = document.querySelectorAll('.custom-multiple');
+        selects.forEach(select => {
+            select.addEventListener('click', function (event) {
+                // Toggle selection on click
+                const option = event.target;
+                if (option.selected) {
+                    option.selected = false; // Deselect if already selected
+                } else {
+                    option.selected = true; // Select if not already selected
+                }
+            });
+        });
+    });
+</script>
