@@ -29,7 +29,7 @@ class MainScreen extends StatelessWidget {
               ),
             Expanded(
               flex: 8, // Adjusted flex to ensure proper layout
-              child: const DashboardWidget(),
+              child:  DashboardWidget(),
             ),
           ],
         ),

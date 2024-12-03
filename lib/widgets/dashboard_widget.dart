@@ -9,18 +9,20 @@ class DashboardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 18),
-        child: Column(
-          children: [
-            const SizedBox(height: 18),
-            const HeaderWidget(),
-            const SizedBox(height: 18),
-            const ActivityDetailsCard(),
-            const SizedBox(height: 18),
-        
-          ],
+    return const Scaffold(
+      body:  SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 18),
+          child: Column(
+            children: [
+              SizedBox(height: 18),
+              HeaderWidget(),
+              SizedBox(height: 18),
+              ActivityDetailsCard(),
+              SizedBox(height: 18),
+
+            ],
+          ),
         ),
       ),
     );
