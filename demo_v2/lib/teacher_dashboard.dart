@@ -1,4 +1,6 @@
+import 'package:demo_v2/scanner.dart';
 import 'package:flutter/material.dart';
+import 'create_pdf.dart';
 
 class TeacherDashboard extends StatelessWidget {
   const TeacherDashboard({Key? key}) : super(key: key);
@@ -38,10 +40,10 @@ class TeacherDashboard extends StatelessWidget {
                   mainAxisSpacing: 16,
                 ),
                 children: [
-                  _buildDashboardTile(Icons.history_edu, 'Grade History'),
-                  _buildDashboardTile(Icons.people, 'Faculty List'),
-                  _buildDashboardTile(Icons.edit_note, 'Current Exam'),
-                  _buildDashboardTile(Icons.assignment_return, 'Request for Recheck'),
+                  _buildDashboardTile(Icons.history_edu, 'Exam History', const TeacherDashboard(), context),
+                  _buildDashboardTile(Icons.people, 'Section List', const TeacherDashboard(), context),
+                  _buildDashboardTile(Icons.edit_note, 'Create Exam ', const Grade(), context),
+                  _buildDashboardTile(Icons.assignment_return, 'Request for Recheck', const TeacherDashboard(), context),
                 ],
               ),
             ),
@@ -52,21 +54,32 @@ class TeacherDashboard extends StatelessWidget {
     );
   }
 
-  Widget _buildDashboardTile(IconData icon, String label) {
+  Widget _buildDashboardTile(IconData icon, String label, Widget destination, BuildContext context) {
+
     return Card(
       color: Colors.grey[900],
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, size: 50, color: Colors.white),
-          const SizedBox(height: 10),
-          Text(
-            label,
-            style: const TextStyle(color: Colors.white, fontSize: 16),
-          ),
-        ],
+
+      child: InkWell(
+
+        onTap: ()  {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => destination)
+          );
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 50, color: Colors.white),
+            const SizedBox(height: 10),
+            Text(
+              label,
+              style: const TextStyle(color: Colors.white, fontSize: 16),
+            ),
+          ],
+        ),
       ),
     );
+
   }
 
   Widget _buildTeacherSidebar(BuildContext context) {
