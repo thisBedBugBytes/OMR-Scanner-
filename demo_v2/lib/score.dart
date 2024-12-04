@@ -135,11 +135,12 @@ class saveTest{
    });
   }
 
-  Future<Map<int, Map<int, int>> ReadAns({required String test_id})async{
-   final answers = _firestore.collection("Answer");
+  Future<String>readAns() async{
+    final test_ref = await _firestore.collection('Test').doc();
+    String test_id = test_ref.id;
+    return test_id;
+  }
 
-    Map<int, int> q_n_a;
 
-}
 
 }
