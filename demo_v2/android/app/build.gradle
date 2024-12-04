@@ -38,10 +38,13 @@ android {
             signingConfig = signingConfigs.debug
         }
     }
+<<<<<<< HEAD
     lintOptions {
         warning 'Deprecation'
         checkReleaseBuilds false
     }
+=======
+>>>>>>> app_updates
 }
 
 flutter {
@@ -50,6 +53,9 @@ flutter {
 dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.6.0"))
     implementation("com.google.firebase:firebase-analytics")
+<<<<<<< HEAD
     implementation("com.google.firebase:firebase-firestore") // Add Firestore dependency
+=======
+>>>>>>> app_updates
 }
 apply plugin: 'com.google.gms.google-services'

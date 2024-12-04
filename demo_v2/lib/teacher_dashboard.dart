@@ -1,4 +1,10 @@
+<<<<<<< HEAD
 import 'package:flutter/material.dart';
+=======
+import 'package:demo_v2/scanner.dart';
+import 'package:flutter/material.dart';
+import 'create_pdf.dart';
+>>>>>>> app_updates
 
 class TeacherDashboard extends StatelessWidget {
   const TeacherDashboard({Key? key}) : super(key: key);
@@ -38,10 +44,17 @@ class TeacherDashboard extends StatelessWidget {
                   mainAxisSpacing: 16,
                 ),
                 children: [
+<<<<<<< HEAD
                   _buildDashboardTile(Icons.history_edu, 'Grade History'),
                   _buildDashboardTile(Icons.people, 'Faculty List'),
                   _buildDashboardTile(Icons.edit_note, 'Current Exam'),
                   _buildDashboardTile(Icons.assignment_return, 'Request for Recheck'),
+=======
+                  _buildDashboardTile(Icons.history_edu, 'Exam History', const TeacherDashboard(), context),
+                  _buildDashboardTile(Icons.people, 'Section List', const TeacherDashboard(), context),
+                  _buildDashboardTile(Icons.edit_note, 'Create Exam ', const Grade(), context),
+                  _buildDashboardTile(Icons.assignment_return, 'Request for Recheck', const TeacherDashboard(), context),
+>>>>>>> app_updates
                 ],
               ),
             ),
@@ -52,6 +65,7 @@ class TeacherDashboard extends StatelessWidget {
     );
   }
 
+<<<<<<< HEAD
   Widget _buildDashboardTile(IconData icon, String label) {
     return Card(
       color: Colors.grey[900],
@@ -67,6 +81,34 @@ class TeacherDashboard extends StatelessWidget {
         ],
       ),
     );
+=======
+  Widget _buildDashboardTile(IconData icon, String label, Widget destination, BuildContext context) {
+
+    return Card(
+      color: Colors.grey[900],
+
+      child: InkWell(
+
+        onTap: ()  {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => destination)
+          );
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 50, color: Colors.white),
+            const SizedBox(height: 10),
+            Text(
+              label,
+              style: const TextStyle(color: Colors.white, fontSize: 16),
+            ),
+          ],
+        ),
+      ),
+    );
+
+>>>>>>> app_updates
   }
 
   Widget _buildTeacherSidebar(BuildContext context) {
