@@ -48,15 +48,8 @@ class _GradeState extends State<Grade> {
       //String path = 'C:\\Temp\\birjis.pdf'; // Fixed path for saving the PDF
       if(Platform.isAndroid){
         // print("Im here");
-        final androidInfo = await DeviceInfoPlugin().androidInfo;
-        PermissionStatus status;
-        if (androidInfo.version.sdkInt <= 32){
-          status = await Permission.storage.request();
-
-        } else {
-          status = await Permission.photos.request();
-        }
-        if (status.isGranted) {
+       bool status = await getPermision();
+        if (status) {
           var result = response.bodyBytes;
           FileStorage.writeCounter(result, filename);
           filePath = 'storage/emulated/0/Download/$filename';
@@ -250,13 +243,22 @@ Future<bool> getPermision()async {
   if(Platform.isAndroid) {
     // print("Im here");
     final androidInfo = await DeviceInfoPlugin().androidInfo;
-    PermissionStatus status;
+    bool status = true;
     if (androidInfo.version.sdkInt <= 32) {
-      status = await Permission.storage.request();
-    } else {
-      status = await Permission.photos.request();
+    if(await Permission.storage.request().isGranted){
+      status = true;
     }
-    return status.isGranted;
+    else if(await Permission.storage.request().isDenied){
+      status = false;
+    }
+    else if(await Permission.storage.request().isPermanentlyDenied){
+      status = false;
+    }
+    }
+    else{
+      status = true;
+    }
+    return status;
   }
   else return true;
 }
