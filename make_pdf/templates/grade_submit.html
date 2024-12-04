@@ -2,7 +2,9 @@
 {% block content %}
 <form method = "POST" action="" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form }}
-    <button type="submit">Upload</button>
+    
+    <input type="file" name="images" multiple>
+    <button type="submit">Send</button>
+     
 </form>
 {% endblock %}

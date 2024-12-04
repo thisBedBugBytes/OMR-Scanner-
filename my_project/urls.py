@@ -18,13 +18,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 import make_pdf
+import main_app
 from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
     
     path("admin/", admin.site.urls),
-    path("", include('make_pdf.urls'))
+    path("", include('make_pdf.urls')),
+   # path("", include("main_app.urls")),
     
 ]
 
