@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class ScoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -83,4 +84,62 @@ class ScoreService {
       print("Error creating new score document: $e");
     }
   }
+}
+
+
+class saveTest{
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  Future<void> SaveAns({
+    required String teacher_email,
+    required String course_code,
+    required String test_id,
+    required Map<String, dynamic> ansData,
+    required int questionNum
+  }) async{
+    final testData = _firestore.collection("Test").doc();
+    var page = 0;
+    for(var i = 0; i < questionNum; i++){
+
+      if((i+4)%60 == 0){
+        page = page + 1;
+      }
+      final answerDocRef = testData.collection('Answer').doc(questionNum.toString());
+
+      var q = i.toString();
+      answerDocRef.set({
+        q: {
+          'Page': page,
+          'Answer': -1,
+          'Teacher_id': teacher_email,
+          'Course_code': course_code,
+          'Date_log': FieldValue.serverTimestamp()
+        },
+        'Test_id': test_id
+      });
+
+
+    }
+  }
+
+  Future<void> SaveTest({
+    required String teacher_email,
+    required String course_code,
+    required String title
+}) async{
+   final testData = _firestore.collection("Test").doc();
+   testData.set({
+    'Teacher_id': teacher_email,
+     'Course_code': course_code,
+     'title': title,
+     'Created_at': FieldValue.serverTimestamp()
+   });
+  }
+
+  Future<Map<int, Map<int, int>> ReadAns({required String test_id})async{
+   final answers = _firestore.collection("Answer");
+
+    Map<int, int> q_n_a;
+
+}
+
 }

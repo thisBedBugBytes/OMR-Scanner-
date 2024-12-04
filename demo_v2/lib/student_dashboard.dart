@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-=======
 import 'package:demo_v2/scanner.dart';
->>>>>>> app_updates
 import 'package:flutter/material.dart';
 
 class StudentDashboard extends StatelessWidget {
@@ -42,16 +39,10 @@ class StudentDashboard extends StatelessWidget {
                   mainAxisSpacing: 16,
                 ),
                 children: [
-<<<<<<< HEAD
-                  _buildDashboardTile(Icons.people, 'Faculty List'),
-                  _buildDashboardTile(Icons.edit_note, 'Current Exam'),
-                  _buildDashboardTile(Icons.assignment_return, 'Request for Recheck'),
-=======
                   _buildDashboardTile(Icons.people, 'Faculty List', const StudentDashboard(), context),
                   _buildDashboardTile(Icons.edit_note, 'Current Exam', const StudentDashboard(), context),
                   _buildDashboardTile(Icons.edit_note, 'Upload OMR', const StudentDashboard(), context),
                   _buildDashboardTile(Icons.assignment_return, 'Request for Recheck', const StudentDashboard(), context),
->>>>>>> app_updates
                 ],
               ),
             ),
@@ -62,23 +53,6 @@ class StudentDashboard extends StatelessWidget {
     );
   }
 
-<<<<<<< HEAD
-  Widget _buildDashboardTile(IconData icon, String label) {
-    return Card(
-      color: Colors.grey[900],
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, size: 50, color: Colors.white),
-          const SizedBox(height: 10),
-          Text(
-            label,
-            style: const TextStyle(color: Colors.white, fontSize: 16),
-          ),
-        ],
-      ),
-    );
-=======
   Widget _buildDashboardTile(IconData icon, String label, Widget destination, BuildContext context) {
     if(label == 'Upload OMR') {
       return Card(
@@ -129,7 +103,6 @@ class StudentDashboard extends StatelessWidget {
         ),
       );
     }
->>>>>>> app_updates
   }
 
   Widget _buildStudentSidebar(BuildContext context) {

@@ -60,7 +60,6 @@ class _SignupPageState extends State<SignupPage> {
         ));
         return;
       }
-
       // Sign up the user with Firebase Authentication
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
         email: email,

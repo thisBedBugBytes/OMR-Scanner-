@@ -1,13 +1,5 @@
 buildscript {
     repositories {
-<<<<<<< HEAD
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.4'
-        classpath 'com.google.gms:google-services:4.3.15' 
-=======
 
         mavenCentral()
         google()
@@ -15,7 +7,6 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:7.0.4'
         classpath 'com.google.gms:google-services:4.4.2'
->>>>>>> app_updates
     }
 }
 allprojects {
@@ -30,11 +21,6 @@ subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
 }
 subprojects {
-<<<<<<< HEAD
-    project.evaluationDependsOn(":app")
-}
-
-=======
     project.configurations.all {
         resolutionStrategy.eachDependency { details ->
             if (details.requested.group == 'com.android.support'
@@ -44,7 +30,6 @@ subprojects {
         }
     }
 }
->>>>>>> app_updates
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }

@@ -20,9 +20,6 @@ dependencies:
   firebase_core: ^3.8.0
   firebase_auth: ^5.3.3
   cloud_firestore: ^5.5.0
-<<<<<<< HEAD
-
-=======
   fl_chart: ^0.62.0
   flutter_svg: ^2.0.5
   cunning_document_scanner: ^1.2.3
@@ -33,7 +30,6 @@ dependencies:
   device_info_plus: ^11.1.1
   open_file_plus: ^3.4.1+1
   easy_pdf_viewer: ^1.0.8
->>>>>>> app_updates
 dev_dependencies:
   flutter_test:
     sdk: flutter
