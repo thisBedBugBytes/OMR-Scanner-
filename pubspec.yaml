@@ -1,0 +1,54 @@
+name: demo_v2
+description: A new Flutter project.
+
+publish_to: 'none' 
+
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.5 <4.0.0'
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+  provider: ^6.0.5
+
+  cupertino_icons: ^1.0.2
+  curved_navigation_bar: ^1.0.3
+  firebase_core: ^3.8.0
+  firebase_auth: ^5.3.3
+  cloud_firestore: ^5.5.0
+  fl_chart: ^0.62.0
+  flutter_svg: ^2.0.5
+  cunning_document_scanner: ^1.2.3
+  http: ^1.2.2
+  path_provider: ^2.1.5
+  flutter_downloader: ^1.11.8
+  permission_handler: ^11.3.1
+  device_info_plus: ^11.1.1
+  open_file_plus: ^3.4.1+1
+  easy_pdf_viewer: ^1.0.8
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+  flutter_lints: ^2.0.0
+
+
+flutter:
+
+  uses-material-design: true
+
+
+  assets:
+    - assets/
+
+
+  fonts:
+    - family: Inter
+      fonts:
+       - asset: fonts/Inter-Medium.ttf
+       
