@@ -9,7 +9,7 @@
       </div>
             <div class="col-lg-5 shadow-lg mt-5 p-4">                
                 <input type="hidden" name="que_no" value="{{ que_no }}">
-                <input type="hidden" name="que_no" value="{{ que_no }}">
+                
                 <form method="POST" action="{%url 'store_ans' %}">
                
                     {% for q in range_list %}
@@ -22,16 +22,16 @@
                                 <label class="form-check-label" for="inlineRadio1">A</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="question_{{ q }}" id="inlineRadio1" value="1">
+                                <input class="form-check-input" type="radio" name="question_{{ q }}" id="inlineRadio2" value="1">
                                 <label class="form-check-label" for="inlineRadio1">B</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="question_{{ q }}" id="inlineRadio1" value="2">
+                                <input class="form-check-input" type="radio" name="question_{{ q }}" id="inlineRadio3" value="2">
                                 <label class="form-check-label" for="inlineRadio1">C</label>
                             </div>
                             
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="question_{{ q }}" id="inlineRadio1" value="3">
+                                <input class="form-check-input" type="radio" name="question_{{ q }}" id="inlineRadio4" value="3">
                                 <label class="form-check-label " for="inlineRadio1">D</label>
                             </div>
                             

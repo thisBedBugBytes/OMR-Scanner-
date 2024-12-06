@@ -228,12 +228,12 @@ def grader2(image, ANSWERS, que_no):
         bubbled = None
 
         for (j, c) in enumerate(cnts):
-            # Create a mask for the current bubble
+           
             mask = np.zeros(thresh.shape, dtype="uint8")
             cv2.drawContours(mask, [c], -1, 255, -1)
             marked = 0
 
-            # Count the number of white pixels in the bubble
+            # Counting the number of white pixels in the bubble
             mask = cv2.bitwise_and(thresh, thresh, mask=mask)
             total = cv2.sumElems(mask)[0]
             if q == 17:

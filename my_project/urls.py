@@ -26,7 +26,7 @@ urlpatterns = [
     
     path("admin/", admin.site.urls),
     path("", include('make_pdf.urls')),
-   # path("", include("main_app.urls")),
+    #path("main_app/", include("main_app.urls")),
     
 ]
 

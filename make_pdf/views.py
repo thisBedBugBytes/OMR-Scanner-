@@ -94,7 +94,7 @@ def create_pdf(request):
         # Save test_id in session
         request.session['test_id'] = test_id
         request.session.save()  # Force save the session
-
+        
         logger.info("Making the pdf")
         pdf = generate_pdf(que_no)
         
@@ -108,13 +108,13 @@ def create_pdf(request):
 
         logger.info("Sending the pdf")
         response = HttpResponse(content_type='application/pdf')
-        if file_name:  # Ensure file_name is not empty or None
-            sanitized_file_name = file_name.replace('"', '').replace("'", "")  # Sanitize input
+        if file_name: 
+            sanitized_file_name = file_name.replace('"', '').replace("'", "")  # clean the input
             response['Content-Disposition'] = f'attachment; filename="{sanitized_file_name}.pdf"'
         else:
-            response['Content-Disposition'] = 'attachment; filename="default_name.pdf"'  # Fallback
+            response['Content-Disposition'] = 'attachment; filename="default_name.pdf"'  # default
 
-        # Use a custom header to signal the front-end for a redirect
+        #takes to answer taking page
         response['Redirect-After-Download'] = '/store_ans/'
         return response
 
@@ -131,7 +131,7 @@ def store_ans(request):
 
         test_id = request.session['test_id']
         if not test_id:
-            # If test_id is missing, return an error response
+           
             return HttpResponse("Test ID not found", status=400)
       
               
@@ -157,31 +157,43 @@ def store_ans(request):
 
             # Collect answers for the current page and range
             for q in range(q_start, q_end):
-                ans = request.POST.get(f'question_{q}')
+                ans = request.POST.get(f"question_{q}")
+                print(f'question_{q} = {request.POST.get(f"question_{q}")}')
+
+                logger.info("GOt the answer")
+                logger.info(f'ans')
+                print("I have an answer")
+                if ans is None:
+                    print(f"No answer selected for question {q}")
+
                 if ans is not None:
                     if page not in answers:
                         answers[page] = {}
                     #answers[page][q] = int(ans)  # Store the answer as an integer (0, 1, 2, 3)
-                
+                        print(ans)
                         answer_data = {
                     'Page': page,
                     'Answer': int(ans),  # Store the answer as an integer (0, 1, 2, 3)
-                    'Teacher_id': request.session.get('teacher_email'),
-                    'Course_code': request.session.get('course_code'),
-                    'Date_log': firestore.SERVER_TIMESTAMP
+                    #'Teacher_id': request.session.get('teacher_email'),
+                    #'Course_code': request.session.get('course_code'),
+                    #'Date_log': firestore.SERVER_TIMESTAMP
                 }
 
                 # Create the Firestore document for each question on this page
-                answer_doc_ref = db.collection('Test').document(test_id).collection('Answer').document(str(q))
-
-                # Set the document data in Firestore
-                answer_doc_ref.set({
-                    'Answer_data': answer_data,
-                    'Test_id': test_id
+                answer_doc_ref = db.collection('Test').document(test_id).collection('Answer').document(str(q)).set({
+                     'Page': page,
+                    'Answer': int(request.POST.get(f"question_{q}"))
                 })
+                print(answer_data)
+                # Set the document data in Firestore
+                """ answer_doc_ref.set({
+                    'Page': page,
+                    'Answer': int(ans)
+                    
+                })"""
 
                     
-        print(answers)
+        
         #my_instance = Answer_Sheet.objects.create(answer=answers)
 
         return render(request, "pdf_gen.html", {'pdf_created': pdf_created})
@@ -194,6 +206,7 @@ def store_ans(request):
 def submit_paper(request):
     if request.method == "POST":
             images = request.FILES.getlist('images')
+            #test_id = request.POST['test_id']
             logger.info('POST')
             ANSWERS = {
             0:{0:0, 1: 2, 2: 1, 3: 0, 4: 3, 5: 2, 6: 0, 7: 1, 8: 2, 9: 3, 10: 1, 11: 2, 12: 0,
