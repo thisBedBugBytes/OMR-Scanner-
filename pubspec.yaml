@@ -30,6 +30,7 @@ dependencies:
   device_info_plus: ^11.1.1
   open_file_plus: ^3.4.1+1
   easy_pdf_viewer: ^1.0.8
+  uuid: ^4.4.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

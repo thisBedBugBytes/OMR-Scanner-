@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
 import 'package:cunning_document_scanner/cunning_document_scanner.dart';
+import 'package:demo_v2/student_dashboard.dart';
 import 'package:demo_v2/teacher_dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -25,9 +26,10 @@ class Scanner {
     } catch (exception) {
       print("Error during scanning: $exception");
     }
-    Navigator.push(context,
-    MaterialPageRoute(builder: (context) => const TeacherDashboard())
-    );
+    // Navigator.push(context,
+    // MaterialPageRoute(builder: (context) => const StudentDashboard())
+    // );
+    Navigator.pop(context);
   }
 }
 class sendImage {
@@ -36,7 +38,7 @@ class sendImage {
   var client = http.Client();
   Future <int>getGrade() async {
     try {
-      var url = Uri.parse('http://192.168.1.102:8000/submitPaper/');
+      var url = Uri.parse('http://172.20.113.225:8000/submitPaper/');
       var request = await http.MultipartRequest('POST', url);
 
       for(var image in path){

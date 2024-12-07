@@ -1,5 +1,8 @@
 import 'dart:typed_data';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demo_v2/form.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -7,6 +10,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:open_file_plus/open_file_plus.dart';
 import 'package:easy_pdf_viewer/easy_pdf_viewer.dart';
+import 'package:uuid/uuid.dart';
 
 class Grade extends StatefulWidget {
   const Grade({super.key});
@@ -16,6 +20,8 @@ class Grade extends StatefulWidget {
 }
 
 class _GradeState extends State<Grade> {
+
+
 
   var success = false;
   String filePath = "";
@@ -35,7 +41,7 @@ class _GradeState extends State<Grade> {
   //Uint8List base64Decode(String source) => base64.decode(source);
   Future<void> createData(String name, int q) async{
 
-    var url = Uri.parse('http://192.168.1.102:8000/pdf_generation/');
+    var url = Uri.parse('http://172.20.113.225:8000/pdf_generation/');
     print(q);
     String filename = name + ".pdf";
     var response = await client.post(url,
@@ -144,8 +150,8 @@ class _GradeState extends State<Grade> {
                       context: context, // Ensure you're passing the correct BuildContext
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text("File download"),
-                          content: Text("You can view your test paper now"),
+                          title: const Text("File download"),
+                          content: const Text("You can view your test paper now"),
                           actions: [
                             TextButton(onPressed: () async {
                               var status = await getPermision();
@@ -154,7 +160,15 @@ class _GradeState extends State<Grade> {
                                 filePath = await FileStorage.getExternalDocumentPath();
                                 filePath += "/" + fileName + ".pdf";
                                 print(filePath);
-                                OpenFile.open(filePath);
+                                //OpenFile.open(filePath);
+                                OpenFile.open(filePath).then((result){
+                                  if(result.type == ResultType.done){
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => RadioExample(questions: questionNo, test_id: "123")));
+                                  }
+                                });
+
 
                               }
                               else{
@@ -262,3 +276,42 @@ Future<bool> getPermision()async {
   }
   else return true;
 }
+//for storing the test info.
+//evertime a test is created, the test id should be availabe to the student collection/entity
+//in some way, so that the student can upload image for that specific test
+// class Tests{
+//   final FirebaseAuth _auth = FirebaseAuth.instance;
+//   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+//
+//   var teacherId;
+//   var sectionId;
+//   Tests() {
+//
+//     User? user = _auth.currentUser;
+//     teacherId = user!.uid;
+//     var query = _firestore.collection('Section').where("teacher_id", "==", teacherId);
+//
+//   }
+//   Uuid uuid = Uuid();
+//   var testId;
+//
+//
+//   Future<void> setTest(var test_id)async {
+//     await _firestore.collection('Test').doc(test_id).set({
+//       'sectionId': '',
+//       'teacherId': teacherId, //need from the _auth
+//       'courseId': ''
+//     });
+//     await _firestore.collection('Test').doc(test_id).collection('Answer').doc('temp').set(
+//         {
+//           'status': 'null'
+//         });
+//     await _firestore.collection('Test').doc(testId).collection('Answer').doc('temp').delete;
+//
+//     }
+//   }
+//
+//
+//
+//
+//}

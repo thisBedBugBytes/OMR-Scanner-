@@ -44,8 +44,8 @@ class StudentDashboard extends StatelessWidget {
                 ),
                 children: [
                   _buildDashboardTile(Icons.people, 'Faculty List', const FacultyListPage(), context),
-                  _buildDashboardTile(Icons.edit_note, 'Current Exam', const StudentDashboard(), context),
-                 // _buildDashboardTile(Icons.upload_file, 'Upload OMR', const Scanner(), context),
+                  //_buildDashboardTile(Icons.edit_note, 'Current Exam', const StudentDashboard(), context),
+                  _buildDashboardTile(Icons.upload_file, 'Upload OMR',  const StudentDashboard() , context),
                   _buildDashboardTile(Icons.assignment_return, 'Request for Recheck', const request(), context),
                 ],
               ),
