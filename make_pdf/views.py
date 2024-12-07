@@ -171,26 +171,14 @@ def store_ans(request):
                         answers[page] = {}
                     #answers[page][q] = int(ans)  # Store the answer as an integer (0, 1, 2, 3)
                         print(ans)
-                        answer_data = {
-                    'Page': page,
-                    'Answer': int(ans),  # Store the answer as an integer (0, 1, 2, 3)
-                    #'Teacher_id': request.session.get('teacher_email'),
-                    #'Course_code': request.session.get('course_code'),
-                    #'Date_log': firestore.SERVER_TIMESTAMP
-                }
+                        
 
                 # Create the Firestore document for each question on this page
                 answer_doc_ref = db.collection('Test').document(test_id).collection('Answer').document(str(q)).set({
                      'Page': page,
                     'Answer': int(request.POST.get(f"question_{q}"))
                 })
-                print(answer_data)
-                # Set the document data in Firestore
-                """ answer_doc_ref.set({
-                    'Page': page,
-                    'Answer': int(ans)
-                    
-                })"""
+            
 
                     
         
