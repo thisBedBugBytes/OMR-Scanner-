@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart'; // Import FirebaseAuth
+import 'Users.dart';
 import 'forgot_password.dart';
 import 'signup_page.dart';
 import 'teacher_dashboard.dart';
@@ -16,7 +17,7 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool isTeacherMode = true;
-
+  Users user = Users();
   // Sign in function
   Future<void> _signIn() async {
     try {
@@ -36,6 +37,7 @@ class _LoginPageState extends State<LoginPage> {
           ));
           return;
         }
+        user.insertTeacher(email);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const TeacherDashboard()),
@@ -48,6 +50,7 @@ class _LoginPageState extends State<LoginPage> {
           ));
           return;
         }
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const StudentDashboard()),

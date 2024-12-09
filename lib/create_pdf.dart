@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo_v2/form.dart';
+import 'package:demo_v2/teacher_dashboard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +42,7 @@ class _GradeState extends State<Grade> {
   //Uint8List base64Decode(String source) => base64.decode(source);
   Future<void> createData(String name, int q) async{
 
-    var url = Uri.parse('http://172.20.113.225:8000/pdf_generation/');
+    var url = Uri.parse('http://192.168.1.102:8000/pdf_generation/');
     print(q);
     String filename = name + ".pdf";
     var response = await client.post(url,
@@ -156,6 +157,8 @@ class _GradeState extends State<Grade> {
                             TextButton(onPressed: () async {
                               var status = await getPermision();
                               if(status) {
+                               // var testId = uuid.v1();
+
                                 //String filePath = await getFilePath();
                                 filePath = await FileStorage.getExternalDocumentPath();
                                 filePath += "/" + fileName + ".pdf";
@@ -177,7 +180,11 @@ class _GradeState extends State<Grade> {
 
                             }, child: const Text("Open")),
                             TextButton(onPressed: () {
-                              Navigator.pop(context);
+                              //Navigator.pop(context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => TeacherDashboard())
+                              );
                             },
                                 child: Text("Cancel"))
                           ],
@@ -276,42 +283,42 @@ Future<bool> getPermision()async {
   }
   else return true;
 }
-//for storing the test info.
-//evertime a test is created, the test id should be availabe to the student collection/entity
-//in some way, so that the student can upload image for that specific test
-// class Tests{
-//   final FirebaseAuth _auth = FirebaseAuth.instance;
-//   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-//
-//   var teacherId;
-//   var sectionId;
-//   Tests() {
-//
-//     User? user = _auth.currentUser;
-//     teacherId = user!.uid;
-//     var query = _firestore.collection('Section').where("teacher_id", "==", teacherId);
-//
-//   }
-//   Uuid uuid = Uuid();
-//   var testId;
-//
-//
-//   Future<void> setTest(var test_id)async {
-//     await _firestore.collection('Test').doc(test_id).set({
-//       'sectionId': '',
-//       'teacherId': teacherId, //need from the _auth
-//       'courseId': ''
-//     });
-//     await _firestore.collection('Test').doc(test_id).collection('Answer').doc('temp').set(
-//         {
-//           'status': 'null'
-//         });
-//     await _firestore.collection('Test').doc(testId).collection('Answer').doc('temp').delete;
-//
-//     }
-//   }
-//
-//
-//
-//
-//}
+
+// for storing the test info.
+// evertime a test is created, the test id should be availabe to the student collection/entity
+// in some way, so that the student can upload image for that specific test
+class Tests{
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  var teacherId;
+  var sectionId;
+  Tests() {
+
+    User? user = _auth.currentUser;
+    teacherId = user!.uid;
+    var query = _firestore.collection('Section').where("teacher_id",  isEqualTo: teacherId);
+
+  }
+  Uuid uuid = Uuid();
+  var testId;
+
+
+  Future<void> setTest(var test_id)async {
+    await _firestore.collection('Test').doc(test_id).set({
+      'sectionId': '',
+      'teacherId': teacherId, //need from the _auth
+      'courseId': ''
+    });
+    await _firestore.collection('Test').doc(test_id).collection('Answer').doc('temp').set(
+        {
+          'status': 'null'
+        });
+    await _firestore.collection('Test').doc(testId).collection('Answer').doc('temp').delete;
+
+    }
+  }
+
+
+
+

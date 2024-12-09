@@ -1,6 +1,4 @@
 import 'dart:core';
-import 'dart:core';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo_v2/request.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -59,79 +57,105 @@ class _RadioExampleState extends State<RadioExample> {
         body: ListView.builder(
           itemCount: q, // q is the number of rows you want to create
           itemBuilder: (context, index) {
+            int idx = index + 1 ;
             return Row(
-              children: <Widget>[
+              children:
+              <Widget>[
+                Text('$idx.'),
                 Flexible(
-                  child: ListTile(
-                    title: Text('A'),
-                    leading: Radio<Choice>(
-                      value: Choice.A,
-                      // Loop through choices if q > 4
-                      groupValue: chosen[index],
-                      onChanged: (Choice? value) {
-                        setState(() {
-                          chosen[index] = value;
-                          answerList.answers[index] = answerList.key[chosen] ?? -1;
-                        });
-                      },
+                  child: Transform.scale(
+                    scale: 0.7,
+                    child: ListTile(
+                      title: Text('A'),
+                      leading: Radio<Choice>(
+                        value: Choice.A,
+                        // Loop through choices if q > 4
+                        groupValue: chosen[index],
+                        onChanged: (Choice? value) {
+                          setState(() {
+                            chosen[index] = value;
+                            answerList.answers[index] = answerList.key[chosen] ?? -1;
+                          });
+                        },
+                      ),
                     ),
                   ),
                 ),
                 Flexible(
-                  child: ListTile(
-                    title: Text('B'),
-                    leading: Radio<Choice>(
-                      value: Choice.B,
-                      // Loop through choices if q > 4
-                      groupValue: chosen[index],
-                      onChanged: (Choice? value) {
-                        setState(() {
-                          chosen[index] = value;
-                          answerList.answers[index] = answerList.key[chosen] ?? -1;
-                        });
-                      },
+                  child: Transform.scale(
+                    scale: 0.7,
+                    child: ListTile(
+                      title: Text('B'),
+                      leading: Radio<Choice>(
+                        value: Choice.B,
+                        // Loop through choices if q > 4
+                        groupValue: chosen[index],
+                        onChanged: (Choice? value) {
+                          setState(() {
+                            chosen[index] = value;
+                            answerList.answers[index] = answerList.key[chosen] ?? -1;
+                          });
+                        },
+                      ),
                     ),
                   ),
                 ),
                 Flexible(
-                  child: ListTile(
-                    title: Text('C'),
-                    leading: Radio<Choice>(
-                      value: Choice.C,
-                      // Loop through choices if q > 4
-                      groupValue: chosen[index],
-                      onChanged: (Choice? value) {
-                        setState(() {
-                          chosen[index] = value;
-                          answerList.answers[index] = answerList.key[chosen] ?? -1;
-                        });
-                      },
+                  child: Transform.scale(
+                    scale: 0.7,
+                    child: ListTile(
+                      title: Text('C'),
+                      leading: Radio<Choice>(
+                        value: Choice.C,
+                        // Loop through choices if q > 4
+                        groupValue: chosen[index],
+                        onChanged: (Choice? value) {
+                          setState(() {
+                            chosen[index] = value;
+                            answerList.answers[index] = answerList.key[chosen] ?? -1;
+                          });
+                        },
+                      ),
                     ),
                   ),
                 ),
                 Flexible(
-                  child: ListTile(
-                    title: Text('D'),
-                    leading: Radio<Choice>(
-                      value: Choice.D,
-                      // Loop through choices if q > 4
-                      groupValue: chosen[index],
-                      onChanged: (Choice? value) {
-                        setState(() {
-                          chosen[index] = value;
-                          answerList.answers[index] = answerList.key[chosen] ?? -1;
-                        });
-                      },
+                  child: Transform.scale(
+                    scale: 0.7,
+                    child: ListTile(
+                      title: Text('D'),
+                      leading: Radio<Choice>(
+                        value: Choice.D,
+                        // Loop through choices if q > 4
+                        groupValue: chosen[index],
+                        onChanged: (Choice? value) {
+                          setState(() {
+                            chosen[index] = value;
+                            answerList.answers[index] = answerList.key[chosen] ?? -1;
+                          });
+                        },
+                      ),
+
                     ),
                   ),
                 ),
-      
               ],
+
             );
           },
-          prototypeItem: ElevatedButton(onPressed: () {
-            answerList.createForm();
-          }, child: const Text("Store answers"),)
+
+        ),
+
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.all(25.0),
+          child: FloatingActionButton.extended(
+            onPressed: () {
+              answerList.createForm();
+              Navigator.pop(context);
+            },
+
+            label: const Text("Store Answers"),
+          ),
         ),
       
       ),
