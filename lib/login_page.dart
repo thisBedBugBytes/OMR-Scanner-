@@ -14,12 +14,17 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool isTeacherMode = true;
+
+
   Users user = Users();
   // Sign in function
   Future<void> _signIn() async {
+    User? cUser = _auth.currentUser;
     try {
       final UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
@@ -37,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
           ));
           return;
         }
-        user.insertTeacher(email);
+        user.insertTeacher(cUser!.uid);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const TeacherDashboard()),
@@ -50,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
           ));
           return;
         }
-        user.insertStudent(email);
+        user.insertStudent(cUser!.uid);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const StudentDashboard()),

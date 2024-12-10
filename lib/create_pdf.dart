@@ -194,6 +194,7 @@ class _GradeState extends State<Grade> {
 
                             }, child: const Text("Open")),
                             TextButton(onPressed: () {
+                              test.setTest(course);
                               //Navigator.pop(context);
                               Navigator.push(
                                 context,
@@ -331,10 +332,16 @@ class Tests{
       await _firestore.collection('Test').doc(testId).collection('Answer').doc('temp').set({
         'status': 'null',
       });
-      final students = await _firestore.collection('Student').get();
+      final students = await _firestore.collection('Student').where('Courses', arrayContains: course).get();
+      for(var doc in students.docs){
+        doc.reference.update({
+          'Test': FieldValue.arrayUnion([testId]),
+          'Score': -1
+        });
+      }
 
       // Now delete the document
-       _firestore.collection('Test').doc(testId).collection('Answer').doc('temp').delete();
+      await _firestore.collection('Test').doc(testId).collection('Answer').doc('temp').delete();
     } catch (e) {
       print("Error occurred: $e");
     }

@@ -11,11 +11,14 @@ class Users{
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 //teacher(email): Courses [section+course_code]
-  void insertTeacher(String email){
-    _firestore.collection('Faculties').doc(email).set({
+  Future<void> insertTeacher(String email) async {
+    var teacher = await _firestore.collection('Faculties').doc(email).get();
+    if(!teacher.exists) {
+      _firestore.collection('Faculties').doc(email).set({
 
-      'Courses':[]
-    });
+        'Courses': []
+      });
+    }
   }
 
   dynamic selectTeacher(String email){
@@ -32,12 +35,14 @@ class Users{
     return courseList;
   }
   //student: name, course_list [course_code+section] test subcollection: testid, score
-  void insertStudent(String email){
-    _firestore.collection('Student').doc(email).set({
+  void insertStudent(String email) async{
+    var student = await _firestore.collection('Student').doc(email).get();
+    if(!student.exists) {
+      _firestore.collection('Student').doc(email).set({
 
-      'Courses':[]
-
-    });
+        'Courses': []
+      });
+    }
     //section: course_code+sectionnumber, teacherId(email)
     //test: testId, courseId+sectionnumber, Answer(question): answer_key
   }

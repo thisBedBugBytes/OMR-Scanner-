@@ -32,6 +32,9 @@ class _SignupPageState extends State<SignupPage> {
         ));
         return;
       }
+      //get the uid
+
+
 
       // Validate email input based on role
       String email = _emailController.text.trim();

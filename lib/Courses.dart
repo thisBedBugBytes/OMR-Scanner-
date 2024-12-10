@@ -36,6 +36,19 @@ class _CoursesPageState extends State<Courses> {
     }
     return [];
   }
+  Future<String> _getAvailableCoursesID(String name) async {
+    try {
+      var coursesSnapshot = await _firestore.collection('Course List').where('Course ID', isEqualTo: name).get();
+      var doc = coursesSnapshot.docs.first;
+      String courses = doc.id;
+      print('Fetched courses: $courses'); // Debugging
+      return courses;
+    } catch (e) {
+      print('Error fetching courses: $e');
+      return "";
+    }
+  }
+
 
   // Fetch available courses from the main courses collection
   Future<List<Map<String, dynamic>>> _getAvailableCourses() async {
@@ -57,13 +70,21 @@ class _CoursesPageState extends State<Courses> {
   Future<void> _addCourse(Map<String, dynamic> course) async {
     User? user = _auth.currentUser;
     if (user != null) {
-      await _firestore.collection('UserCourses').add({
+
+      String id = user.uid + '||' + course['Course ID'].toString();
+
+      await _firestore.collection('UserCourses').doc(id).set({
         'userId': user.uid,
         'Course Name': course['Course Name'],
         'Course ID': course['Course ID'],
         'Credit': course['Credit'],
       });
+
       setState(() {});
+      String courseId = await _getAvailableCoursesID(course['Course ID']);
+      await _firestore.collection('Student').doc(user.uid).update({
+        'Courses': FieldValue.arrayUnion([courseId])
+      });
     }
   }
 
