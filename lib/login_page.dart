@@ -50,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
           ));
           return;
         }
-
+        user.insertStudent(email);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const StudentDashboard()),

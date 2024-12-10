@@ -1,6 +1,8 @@
 import 'dart:core';
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo_v2/request.dart';
+import 'package:demo_v2/teacher_dashboard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -32,11 +34,12 @@ class RadioExample extends StatefulWidget {
 
 class _RadioExampleState extends State<RadioExample> {
   List<Choice?> chosen = []; // List to store answers for each question
-
+  List<int> ans = [];
   @override
   void initState() {
     super.initState();
     chosen = List.filled(widget.questions, Choice.E); // Initialize the list with null (no answer selected)
+    ans = List.filled(widget.questions, -1);
   }
 
   List<Choice?> returnChosen(){
@@ -48,9 +51,10 @@ class _RadioExampleState extends State<RadioExample> {
   Widget build(BuildContext context) {
     int q = widget.questions;
     var testId = widget.test_id;
-
+    print("this is the testId");
+    print(testId);
     answerForm answerList = answerForm(q, testId);
-    answerList.answers = List.filled(q, -1);
+
     return MaterialApp(
       home: Scaffold(
       
@@ -62,6 +66,7 @@ class _RadioExampleState extends State<RadioExample> {
               children:
               <Widget>[
                 Text('$idx.'),
+
                 Flexible(
                   child: Transform.scale(
                     scale: 0.7,
@@ -74,8 +79,10 @@ class _RadioExampleState extends State<RadioExample> {
                         onChanged: (Choice? value) {
                           setState(() {
                             chosen[index] = value;
-                            answerList.answers[index] = answerList.key[chosen] ?? -1;
+                            ans[index] = 0;
+                            print(answerList.key[chosen]);
                           });
+
                         },
                       ),
                     ),
@@ -93,8 +100,9 @@ class _RadioExampleState extends State<RadioExample> {
                         onChanged: (Choice? value) {
                           setState(() {
                             chosen[index] = value;
-                            answerList.answers[index] = answerList.key[chosen] ?? -1;
+                            ans[index] = 1;
                           });
+
                         },
                       ),
                     ),
@@ -112,7 +120,7 @@ class _RadioExampleState extends State<RadioExample> {
                         onChanged: (Choice? value) {
                           setState(() {
                             chosen[index] = value;
-                            answerList.answers[index] = answerList.key[chosen] ?? -1;
+                            ans[index] = 2;
                           });
                         },
                       ),
@@ -131,7 +139,9 @@ class _RadioExampleState extends State<RadioExample> {
                         onChanged: (Choice? value) {
                           setState(() {
                             chosen[index] = value;
-                            answerList.answers[index] = answerList.key[chosen] ?? -1;
+                            ans[index] = 3;
+                            print(index);
+                            print(ans[index]);
                           });
                         },
                       ),
@@ -139,6 +149,7 @@ class _RadioExampleState extends State<RadioExample> {
                     ),
                   ),
                 ),
+
               ],
 
             );
@@ -150,8 +161,12 @@ class _RadioExampleState extends State<RadioExample> {
           padding: const EdgeInsets.all(25.0),
           child: FloatingActionButton.extended(
             onPressed: () {
-              answerList.createForm();
-              Navigator.pop(context);
+              answerList.answers = ans;
+              answerList.createForm(ans);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TeacherDashboard()));
+
             },
 
             label: const Text("Store Answers"),
@@ -171,21 +186,34 @@ class answerForm{
   Map<Choice, int> key = {Choice.A: 0, Choice.B: 1, Choice.C: 2, Choice.D: 3};
   List<int> answers = [];
 
-  void createForm() async{
+  void createForm(List<int> answers) async{
 
-    int page = 0;
+    for(int i = 0; i < question; i++){
+      print(answers[i]);
+    }
+      int pages = 1 + ((question - 56) / 60).ceil();
+    int qStart, qEnd;
 
-    for(int i = 0; i<question; i++){
+    for(int page = 0; page<pages; page++){
     //  _RadioExampleState radioExample =  _RadioExampleState();
-
-      if( (i+4) % 60 == 0) {
-        page += 1;
+      if (page == 0) {
+        qStart = 0;
+        qEnd = min(56, question);
+      } else {
+        qStart = 56 + (page - 1) * 60;
+        qEnd = min(qStart + 60, question);
       }
-      if(test_id != null && answers[i] != -1){
-        _firestore.collection('Test').doc(test_id).collection('Answer').doc(i.toString()).set({
-          'answer': answers[i],
-          'page' : page
-        });
+      for(int i = qStart; i < qEnd; i++) {
+        print("this is inside the createForm");
+        print(page);
+        print(answers[i]);
+        if (test_id != null && answers[i] != -1) {
+         await _firestore.collection('Test').doc(test_id).collection('Answer').doc(
+              i.toString()).set({
+            'Answer': answers[i],
+            'Page': page
+          });
+        }
       }
 
     }

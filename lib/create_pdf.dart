@@ -103,6 +103,7 @@ class _GradeState extends State<Grade> {
   bool scan = false;
   final TextEditingController fileNameController = TextEditingController();
   final TextEditingController questionNoController = TextEditingController();
+  final TextEditingController courseNameController = TextEditingController();
 
   @override
   void dispose() {
@@ -112,6 +113,8 @@ class _GradeState extends State<Grade> {
     super.dispose();
   } @override
   Widget build(BuildContext context) {
+    Tests test = Tests();
+    var testId = test.getTest();
     return Scaffold(
       body: Center(
         child: Column(
@@ -138,13 +141,23 @@ class _GradeState extends State<Grade> {
                 ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: courseNameController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Enter the course name',
+                ),
+              ),
+            ),
             FloatingActionButton(
               onPressed: () {
                 String fileName = fileNameController.text.trim();
                 int questionNo = int.tryParse(questionNoController.text.trim()) ?? 0;
-
+                String course = courseNameController.text.trim();
                 if (fileName.isNotEmpty && questionNo > 0) {
-                  createData(fileName, questionNo);
+                  createData(fileName, questionNo); // makes the pdf
 
 
                   showDialog(
@@ -157,7 +170,8 @@ class _GradeState extends State<Grade> {
                             TextButton(onPressed: () async {
                               var status = await getPermision();
                               if(status) {
-                               // var testId = uuid.v1();
+
+                               test.setTest(course);
 
                                 //String filePath = await getFilePath();
                                 filePath = await FileStorage.getExternalDocumentPath();
@@ -168,7 +182,7 @@ class _GradeState extends State<Grade> {
                                   if(result.type == ResultType.done){
                                     Navigator.pushReplacement(
                                         context,
-                                        MaterialPageRoute(builder: (context) => RadioExample(questions: questionNo, test_id: "123")));
+                                        MaterialPageRoute(builder: (context) => RadioExample(questions: questionNo, test_id: testId)));
                                   }
                                 });
 
@@ -183,8 +197,7 @@ class _GradeState extends State<Grade> {
                               //Navigator.pop(context);
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => TeacherDashboard())
-                              );
+                                  MaterialPageRoute(builder: (context) => RadioExample(questions: questionNo, test_id: testId)));
                             },
                                 child: Text("Cancel"))
                           ],
@@ -291,31 +304,44 @@ class Tests{
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  Uuid uuid = Uuid();
+  var testId;
+
   var teacherId;
   var sectionId;
   Tests() {
 
     User? user = _auth.currentUser;
     teacherId = user!.uid;
+    print(teacherId);
     var query = _firestore.collection('Section').where("teacher_id",  isEqualTo: teacherId);
-
+    testId = uuid.v1();
   }
-  Uuid uuid = Uuid();
-  var testId;
 
 
-  Future<void> setTest(var test_id)async {
-    await _firestore.collection('Test').doc(test_id).set({
-      'sectionId': '',
-      'teacherId': teacherId, //need from the _auth
-      'courseId': ''
-    });
-    await _firestore.collection('Test').doc(test_id).collection('Answer').doc('temp').set(
-        {
-          'status': 'null'
-        });
-    await _firestore.collection('Test').doc(testId).collection('Answer').doc('temp').delete;
 
+  Future<void> setTest(String course)async {
+    try {
+      print(testId);
+      await _firestore.collection('Test').doc(testId).set({
+        'teacherId': teacherId,
+        'courseId': course,
+      });
+
+      await _firestore.collection('Test').doc(testId).collection('Answer').doc('temp').set({
+        'status': 'null',
+      });
+      final students = await _firestore.collection('Student').get();
+
+      // Now delete the document
+       _firestore.collection('Test').doc(testId).collection('Answer').doc('temp').delete();
+    } catch (e) {
+      print("Error occurred: $e");
+    }
+    }
+
+    dynamic getTest(){
+    return testId;
     }
   }
 
