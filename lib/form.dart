@@ -63,6 +63,7 @@ class _RadioExampleState extends State<RadioExample> {
           itemBuilder: (context, index) {
             int idx = index + 1 ;
             return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children:
               <Widget>[
                 Text('$idx.'),

@@ -335,8 +335,13 @@ class Tests{
       final students = await _firestore.collection('Student').where('Courses', arrayContains: course).get();
       for(var doc in students.docs){
         doc.reference.update({
-          'Test': FieldValue.arrayUnion([testId]),
-          'Score': -1
+          'Test': FieldValue.arrayUnion([
+            {
+              'testId': testId,
+              'score': -1,
+            }
+          ]),
+
         });
       }
 

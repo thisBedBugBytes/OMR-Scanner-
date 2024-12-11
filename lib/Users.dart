@@ -35,11 +35,11 @@ class Users{
     return courseList;
   }
   //student: name, course_list [course_code+section] test subcollection: testid, score
-  void insertStudent(String email) async{
-    var student = await _firestore.collection('Student').doc(email).get();
+  void insertStudent(String userId, String email) async{
+    var student = await _firestore.collection('Student').doc(userId).get();
     if(!student.exists) {
-      _firestore.collection('Student').doc(email).set({
-
+      _firestore.collection('Student').doc(userId).set({
+        'email': email,
         'Courses': []
       });
     }

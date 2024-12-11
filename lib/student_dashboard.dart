@@ -2,6 +2,7 @@ import 'package:demo_v2/request.dart';
 import 'package:demo_v2/scanner.dart';
 import 'package:demo_v2/score.dart'; // Import the score page
 import 'package:flutter/material.dart';
+import 'Test.dart';
 import 'faculty_list_page.dart';
 import 'Courses.dart';
 
@@ -64,8 +65,10 @@ class StudentDashboard extends StatelessWidget {
         color: Colors.grey[900],
         child: InkWell(
           onTap: () async {
-            Scanner scanner = Scanner(context);
-            await scanner.onPressed();
+           Navigator.push(
+             context,
+             MaterialPageRoute(builder: (context) => const TestUpload())
+           );
           },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

@@ -15,13 +15,13 @@ class Scanner {
   Scanner(this.context);
 
   List<String> pictures = [];
-  Future<void> onPressed() async {
+  Future<void> onPressed(String testId) async {
     // Perform your scanning logic here
 
     try {
       pictures = await CunningDocumentScanner.getPictures() ?? [];
       sendImage sender = sendImage(pictures);
-      var score = sender.getGrade();
+      var score = sender.getGrade(testId);
       print("Scanned pictures: $pictures");
     } catch (exception) {
       print("Error during scanning: $exception");
@@ -36,11 +36,11 @@ class sendImage {
   List<String> path;
   sendImage(this.path);
   var client = http.Client();
-  Future <int>getGrade() async {
+  Future <int>getGrade(String testId) async {
     try {
-      var url = Uri.parse('http://172.20.113.225:8000/submitPaper/');
+      var url = Uri.parse('http://192.168.1.102:8000/submitPaper/');
       var request = await http.MultipartRequest('POST', url);
-
+      request.fields['testId'] = testId;
       for(var image in path){
         request.files.add(await http.MultipartFile.fromPath('images', image));
       }
